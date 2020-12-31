@@ -13,13 +13,13 @@ struct AlertData: Identifiable {
     var title: String
     var message: String
 }
+
 struct ContentView: View {
     @State private var userName = ""
     @State private var password = ""
     @State private var alertData: AlertData? = nil
     
     @Environment(\.managedObjectContext) private var viewContext
-    
     @ObservedObject var loginModel: LoginDataModel = .shared
     
     var body: some View {
@@ -28,7 +28,9 @@ struct ContentView: View {
         } else {
             
             ZStack{
-                Color.gray
+                Color.init(red: 12.0/255.0,
+                           green: 50.0/255.0,
+                           blue: 100.0/255.0)
                     .ignoresSafeArea()
                 
                 GroupBox {

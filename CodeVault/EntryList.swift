@@ -13,23 +13,30 @@ struct EntryList: View {
     @FetchRequest(
         sortDescriptors: [NSSortDescriptor(keyPath: \Item.timestamp, ascending: true)],
         animation: .default)
+    
     private var items: FetchedResults<Item>
 
+    @FetchRequest(
+        entity: LoginEntry.entity(),
+        sortDescriptors: []//, predicate: NSPredicate(format: "website == %@", "www.aol.com")
+    ) private var websiteDetails: FetchedResults<LoginEntry>
+    
     var body: some View {
         ZStack{
-            List {
-                ForEach(items) { item in
-                    Text("Item at \(item.timestamp!, formatter: itemFormatter)")
-                }
-                .onDelete(perform: deleteItems)
-            }
-            .toolbar {
-                EditButton()
-
-                Button(action: addItem) {
-                    Label("Add Item", systemImage: "plus")
-                }
-            }
+            NavigationView{
+                List {
+                    ForEach(items) { item in
+                        Text("Item at \(item.timestamp!, formatter: itemFormatter)")
+                    }
+                    .onDelete(perform: deleteItems)
+                    .onTapGesture {
+                        print("Tapped")
+                    }
+                }//List
+                .navigationTitle("Websites")
+                .ignoresSafeArea(.keyboard, edges: .bottom)
+            }//NavigationView
+            
             
             VStack {
                 Spacer()
@@ -64,6 +71,26 @@ struct EntryList: View {
                 // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
                 let nsError = error as NSError
                 fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
+            }
+        }
+    }
+    
+    private func addWebsite() {
+        let _name = "myUsername"
+        let _site = "website.com"
+        let _password = "password"
+        
+        withAnimation {
+            let newEntry = LoginEntry(context: viewContext)
+            newEntry.website = _site
+            newEntry.username = _name
+            newEntry.password = _password
+            
+            do {
+                try viewContext.save()
+            } catch {
+                let saveError = error as NSError
+                print(saveError)
             }
         }
     }

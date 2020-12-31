@@ -17,6 +17,7 @@
 		B797187C259CEE63003E052D /* CodeVaultUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B797187B259CEE63003E052D /* CodeVaultUITests.swift */; };
 		B797188D259CF397003E052D /* EntryList.swift in Sources */ = {isa = PBXBuildFile; fileRef = B797188C259CF397003E052D /* EntryList.swift */; };
 		B7971896259CFFCC003E052D /* LoginDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7971895259CFFCC003E052D /* LoginDataModel.swift */; };
+		B79718A9259E8E9D003E052D /* LoginEntry+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = B79718A7259E8E9D003E052D /* LoginEntry+CoreDataClass.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,6 +54,7 @@
 		B797187D259CEE63003E052D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B797188C259CF397003E052D /* EntryList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntryList.swift; sourceTree = "<group>"; };
 		B7971895259CFFCC003E052D /* LoginDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginDataModel.swift; sourceTree = "<group>"; };
+		B79718A7259E8E9D003E052D /* LoginEntry+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LoginEntry+CoreDataClass.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -83,6 +85,7 @@
 		B797184D259CEE5F003E052D = {
 			isa = PBXGroup;
 			children = (
+				B79718A7259E8E9D003E052D /* LoginEntry+CoreDataClass.swift */,
 				B7971858259CEE5F003E052D /* CodeVault */,
 				B797186F259CEE63003E052D /* CodeVaultTests */,
 				B797187A259CEE63003E052D /* CodeVaultUITests */,
@@ -285,6 +288,7 @@
 				B7971866259CEE63003E052D /* CodeVault.xcdatamodeld in Sources */,
 				B797185C259CEE5F003E052D /* ContentView.swift in Sources */,
 				B797185A259CEE5F003E052D /* CodeVaultApp.swift in Sources */,
+				B79718A9259E8E9D003E052D /* LoginEntry+CoreDataClass.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
