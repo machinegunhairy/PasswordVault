@@ -39,7 +39,7 @@ struct ContentView: View {
                     TextField("Username", text: $userName)
                         .textFieldStyle(RoundedBorderTextFieldStyle())
                     
-                    TextField("Password", text: $password)
+                    SecureField("Password", text: $password)
                         .textFieldStyle(RoundedBorderTextFieldStyle())
                         .textContentType(.password)
                     

@@ -22,42 +22,53 @@ struct EntryList: View {
     ) private var websiteDetails: FetchedResults<LoginEntry>
     
     var body: some View {
-        ZStack{
-            NavigationView{
+        NavigationView{
+            
+            ZStack{
+                
                 List {
                     ForEach(items) { item in
-                        Text("Item at \(item.timestamp!, formatter: itemFormatter)")
+                        Label {
+                            Text("Item at \(item.timestamp!, formatter: itemFormatter)")
+                                .padding()
+                            } icon: {
+                                Image("blizzardIcon")
+                            }
                     }
+                    
                     .onDelete(perform: deleteItems)
                     .onTapGesture {
                         print("Tapped")
                     }
                 }//List
-                .navigationTitle("Websites")
-                .ignoresSafeArea(.keyboard, edges: .bottom)
-            }//NavigationView
-            
-            
-            VStack {
-                Spacer()
-                HStack{
+                
+                //This is for the bottom-right button
+                VStack {
                     Spacer()
-                    Button(action: {
-                        addItem()
-                    }) {
-                        Image(systemName: "plus")
-                            .font(.title)
+                    HStack{
+                        Spacer()
+                        Button(action: {
+                            addItem()
+                            addWebsite()
+                        }) {
+                            Image(systemName: "plus")
+                                .font(.title)
+                        }
+                        .padding(20)
+                        .foregroundColor(Color.white)
+                        .background(Color.blue)
+                        .cornerRadius(100)
                     }
-                    .padding(20)
-                    .foregroundColor(Color.white)
-                    .background(Color.blue)
-                    .cornerRadius(100)
-                }
-                .padding(.trailing, 30)
-            }
-        }
+                    .padding(.trailing, 30)
+                }//Vstack
+                
+            }//ZStack
+            .navigationTitle("Websites") //mcgreahamtodo
+            .ignoresSafeArea(.keyboard, edges: .bottom)
+            
+        }//NavigationView
         
-    }
+    }//Body
 
     private func addItem() {
         withAnimation {
@@ -79,9 +90,11 @@ struct EntryList: View {
         let _name = "myUsername"
         let _site = "website.com"
         let _password = "password"
+        let _loginName = "nameILoggedIntoThisAppWith"
         
         withAnimation {
             let newEntry = LoginEntry(context: viewContext)
+            newEntry.appLoginName = _loginName
             newEntry.website = _site
             newEntry.username = _name
             newEntry.password = _password
@@ -96,6 +109,7 @@ struct EntryList: View {
     }
 
     private func deleteItems(offsets: IndexSet) {
+        print(websiteDetails)
         withAnimation {
             offsets.map { items[$0] }.forEach(viewContext.delete)
 
