@@ -7,14 +7,27 @@
 
 import SwiftUI
 
+struct LoginEntryObject: Identifiable {
+    var id = UUID()
+    var websiteURL: String
+    var loginName: String
+    var loginPassword: String
+}
+
+struct LoginRow: View {
+    var loginObject: LoginEntryObject
+    
+    var body: some View {
+        HStack {
+            Image("blizzardIcon")
+                .padding(.horizontal)
+            Text(loginObject.websiteURL)
+        }
+    }
+}
+
 struct EntryList: View {
     @Environment(\.managedObjectContext) private var viewContext
-
-    @FetchRequest(
-        sortDescriptors: [NSSortDescriptor(keyPath: \Item.timestamp, ascending: true)],
-        animation: .default)
-    
-    private var items: FetchedResults<Item>
 
     @FetchRequest(
         entity: LoginEntry.entity(),
@@ -23,20 +36,15 @@ struct EntryList: View {
     
     var body: some View {
         NavigationView{
-            
             ZStack{
-                
                 List {
-                    ForEach(items) { item in
-                        Label {
-                            Text("Item at \(item.timestamp!, formatter: itemFormatter)")
-                                .padding()
-                            } icon: {
-                                Image("blizzardIcon")
-                            }
+                    ForEach(websiteDetails) { webEntry in
+                        LoginRow(loginObject: LoginEntryObject(id: UUID(),
+                                                               websiteURL: webEntry.website ?? "Error",
+                                                               loginName: webEntry.username ?? "Error",
+                                                               loginPassword: webEntry.password ?? "Error"))
                     }
-                    
-                    .onDelete(perform: deleteItems)
+                    .onDelete(perform: deleteLoginEntry)
                     .onTapGesture {
                         print("Tapped")
                     }
@@ -48,7 +56,6 @@ struct EntryList: View {
                     HStack{
                         Spacer()
                         Button(action: {
-                            addItem()
                             addWebsite()
                         }) {
                             Image(systemName: "plus")
@@ -69,22 +76,6 @@ struct EntryList: View {
         }//NavigationView
         
     }//Body
-
-    private func addItem() {
-        withAnimation {
-            let newItem = Item(context: viewContext)
-            newItem.timestamp = Date()
-
-            do {
-                try viewContext.save()
-            } catch {
-                // Replace this implementation with code to handle the error appropriately.
-                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-                let nsError = error as NSError
-                fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
-            }
-        }
-    }
     
     private func addWebsite() {
         let _name = "myUsername"
@@ -108,10 +99,10 @@ struct EntryList: View {
         }
     }
 
-    private func deleteItems(offsets: IndexSet) {
+    private func deleteLoginEntry(offsets: IndexSet) {
         print(websiteDetails)
         withAnimation {
-            offsets.map { items[$0] }.forEach(viewContext.delete)
+            offsets.map { websiteDetails[$0] }.forEach(viewContext.delete)
 
             do {
                 try viewContext.save()
@@ -124,16 +115,10 @@ struct EntryList: View {
         }
     }
 }
-
-private let itemFormatter: DateFormatter = {
-    let formatter = DateFormatter()
-    formatter.dateStyle = .short
-    formatter.timeStyle = .medium
-    return formatter
-}()
-
+/*
 struct EntryList_Previews: PreviewProvider {
     static var previews: some View {
         EntryList().environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
     }
 }
+*/
