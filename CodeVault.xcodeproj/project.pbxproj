@@ -110,6 +110,7 @@
 				B7971891259CFFB6003E052D /* Login */,
 				B79718FD25A785CA003E052D /* SiteList */,
 				B797185D259CEE63003E052D /* Assets.xcassets */,
+				B797188C259CF397003E052D /* EntryList.swift */,
 				B7971862259CEE63003E052D /* Persistence.swift */,
 				B7971867259CEE63003E052D /* Info.plist */,
 				B7971864259CEE63003E052D /* CodeVault.xcdatamodeld */,
@@ -156,7 +157,6 @@
 		B79718FD25A785CA003E052D /* SiteList */ = {
 			isa = PBXGroup;
 			children = (
-				B797188C259CF397003E052D /* EntryList.swift */,
 			);
 			path = SiteList;
 			sourceTree = "<group>";
