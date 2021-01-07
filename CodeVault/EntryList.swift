@@ -16,10 +16,13 @@ struct LoginEntryObject: Identifiable {
 
 struct LoginRow: View {
     var loginObject: LoginEntryObject
-    
+    @State private var webImage: Image?
     var body: some View {
         HStack {
-            Image("blizzardIcon")
+            webImage?
+                .resizable()
+                .scaledToFit()
+                .frame(width: 48, height: 48)
                 .padding(.horizontal)
             VStack(alignment: .leading) {
                 Text(loginObject.websiteURL)
@@ -29,9 +32,13 @@ struct LoginRow: View {
                 Text(loginObject.loginPassword)
                     .frame(maxWidth:.infinity, alignment: .leading)
             } //VStack
-            .padding()
         } //HStack
+        .onAppear(perform: loadImage)
     } //View
+    
+    func loadImage() {
+        webImage = Image(ImageGrabber.getImage(siteName: loginObject.websiteURL))
+    }
 }
 
 struct EntryList: View {

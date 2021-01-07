@@ -18,6 +18,7 @@
 		B797188D259CF397003E052D /* EntryList.swift in Sources */ = {isa = PBXBuildFile; fileRef = B797188C259CF397003E052D /* EntryList.swift */; };
 		B7971896259CFFCC003E052D /* LoginDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7971895259CFFCC003E052D /* LoginDataModel.swift */; };
 		B79718A9259E8E9D003E052D /* LoginEntry+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = B79718A7259E8E9D003E052D /* LoginEntry+CoreDataClass.swift */; };
+		B79718FF25A78D14003E052D /* ImageGrabber.swift in Sources */ = {isa = PBXBuildFile; fileRef = B79718FE25A78D14003E052D /* ImageGrabber.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -55,6 +56,7 @@
 		B797188C259CF397003E052D /* EntryList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntryList.swift; sourceTree = "<group>"; };
 		B7971895259CFFCC003E052D /* LoginDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginDataModel.swift; sourceTree = "<group>"; };
 		B79718A7259E8E9D003E052D /* LoginEntry+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LoginEntry+CoreDataClass.swift"; sourceTree = "<group>"; };
+		B79718FE25A78D14003E052D /* ImageGrabber.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageGrabber.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -108,9 +110,9 @@
 			children = (
 				B7971859259CEE5F003E052D /* CodeVaultApp.swift */,
 				B7971891259CFFB6003E052D /* Login */,
-				B79718FD25A785CA003E052D /* SiteList */,
 				B797185D259CEE63003E052D /* Assets.xcassets */,
 				B797188C259CF397003E052D /* EntryList.swift */,
+				B79718FE25A78D14003E052D /* ImageGrabber.swift */,
 				B7971862259CEE63003E052D /* Persistence.swift */,
 				B7971867259CEE63003E052D /* Info.plist */,
 				B7971864259CEE63003E052D /* CodeVault.xcdatamodeld */,
@@ -152,13 +154,6 @@
 				B7971895259CFFCC003E052D /* LoginDataModel.swift */,
 			);
 			path = Login;
-			sourceTree = "<group>";
-		};
-		B79718FD25A785CA003E052D /* SiteList */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = SiteList;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -295,6 +290,7 @@
 				B797188D259CF397003E052D /* EntryList.swift in Sources */,
 				B7971866259CEE63003E052D /* CodeVault.xcdatamodeld in Sources */,
 				B797185C259CEE5F003E052D /* ContentView.swift in Sources */,
+				B79718FF25A78D14003E052D /* ImageGrabber.swift in Sources */,
 				B797185A259CEE5F003E052D /* CodeVaultApp.swift in Sources */,
 				B79718A9259E8E9D003E052D /* LoginEntry+CoreDataClass.swift in Sources */,
 			);
