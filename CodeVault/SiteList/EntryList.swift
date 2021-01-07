@@ -23,9 +23,13 @@ struct LoginRow: View {
                 .padding(.horizontal)
             VStack(alignment: .leading) {
                 Text(loginObject.websiteURL)
+                    .frame(maxWidth:.infinity, alignment: .leading)
                 Text(loginObject.loginName)
+                    .frame(maxWidth:.infinity, alignment: .leading)
                 Text(loginObject.loginPassword)
+                    .frame(maxWidth:.infinity, alignment: .leading)
             } //VStack
+            .padding()
         } //HStack
     } //View
 }
@@ -36,10 +40,15 @@ struct EntryList: View {
     @State private var newUsername:String = ""
     @State private var newPassword:String = ""
     
+    @State private var popupTitle:String = ""
+    @State private var popupSaveButtonTitle:String = ""
+    @State private var isUpdatingRow:Bool = false
+    @State private var selectedRow:FetchedResults<LoginEntry>.Element? = nil
+    
     @Environment(\.managedObjectContext) private var viewContext
     @FetchRequest(
         entity: LoginEntry.entity(),
-        sortDescriptors: [NSSortDescriptor(keyPath: \LoginEntry.website, ascending: true)]//, predicate: NSPredicate(format: "website == %@", "www.aol.com")
+        sortDescriptors: [NSSortDescriptor(keyPath: \LoginEntry.website, ascending: true)]
     ) private var websiteDetails: FetchedResults<LoginEntry>
     
     var body: some View {
@@ -47,15 +56,24 @@ struct EntryList: View {
             ZStack{
                 List {
                     ForEach(websiteDetails) { webEntry in
+                        let website = webEntry.website ?? "Error"
+                        let logName = webEntry.username ?? "Error"
+                        let logPassword = webEntry.password ?? "Error"
                         LoginRow(loginObject: LoginEntryObject(id: UUID(),
-                                                               websiteURL: webEntry.website ?? "Error",
-                                                               loginName: webEntry.username ?? "Error",
-                                                               loginPassword: webEntry.password ?? "Error"))
+                                                               websiteURL: website,
+                                                               loginName: logName,
+                                                               loginPassword: logPassword))
+                            .contentShape(Rectangle())
+                            .onTapGesture {
+                                setPopupForUpdate()
+                                selectedRow = webEntry
+                                self.newWebsite = website
+                                self.newUsername = logName
+                                self.newPassword = logPassword
+                                showingCustomAdditonPopup = true
+                            }
                     }
                     .onDelete(perform: deleteLoginEntry)
-                    .onTapGesture {
-                        print("Tapped")
-                    }
                 }//List
                 
                 //This is for the bottom-right button
@@ -64,6 +82,7 @@ struct EntryList: View {
                     HStack{
                         Spacer()
                         Button(action: {
+                            setPopupForNewEntry()
                             self.showingCustomAdditonPopup = true
                         }) {
                             Image(systemName: "plus")
@@ -76,13 +95,14 @@ struct EntryList: View {
                     }
                     .padding(.trailing, 30)
                 }//Vstack, bottom-right button
+                
                 if $showingCustomAdditonPopup.wrappedValue {
                     ZStack {
                         Color.black.opacity(0.4)
                             .ignoresSafeArea()
                         
                         VStack(spacing: 20) {
-                            Text("New Login Information")
+                            Text(popupTitle)
                                 .bold().padding()
                                 .frame(maxWidth: .infinity)
                                 .background(Color.blue)
@@ -107,6 +127,7 @@ struct EntryList: View {
                             HStack {
                                 Button(action: {
                                     self.showingCustomAdditonPopup = false
+                                    clearPopupValues()
                                 }) {
                                     Text("Close")
                                 }
@@ -117,11 +138,15 @@ struct EntryList: View {
                                 
                                 Button(action: {
                                     if !self.newWebsite.isEmpty && !self.newUsername.isEmpty && !self.newPassword.isEmpty {
-                                        addWebsite()
+                                        if isUpdatingRow {
+                                            updateWebsite()
+                                        } else {
+                                            addWebsite()
+                                        }
                                         self.showingCustomAdditonPopup = false
                                     }
                                 }) {
-                                    Text("Save")
+                                    Text(popupSaveButtonTitle)
                                 }
                                 .padding()
                                 .background(Color.blue)
@@ -130,11 +155,12 @@ struct EntryList: View {
                             }//HStack
                             .padding(12)
                         }//VStack
-                        .frame(width: 300, height: 325)
+                        .frame(width: 300, height: 336)
                         .background(Color.white)
                         .cornerRadius(20).shadow(radius: 20)
                     }//ZStack
                 }//Popup Wrapper
+                
             }//ZStack
             .navigationTitle("Websites") //mcgreahamtodo
             .ignoresSafeArea(.keyboard, edges: .bottom)
@@ -155,20 +181,26 @@ struct EntryList: View {
             
             do {
                 try viewContext.save()
-                self.newWebsite = ""
-                self.newUsername = ""
-                self.newPassword = ""
+                clearPopupValues()
             } catch {
                 let saveError = error as NSError
                 print(saveError)
             }
         }
     }
+    
+    private func updateWebsite() {
+        viewContext.performAndWait {
+            selectedRow?.website = self.newWebsite
+            selectedRow?.username = self.newUsername
+            selectedRow?.password = self.newPassword
+            try? viewContext.save()
+        }
+    }
 
     private func deleteLoginEntry(offsets: IndexSet) {
         withAnimation {
             offsets.map { websiteDetails[$0] }.forEach(viewContext.delete)
-//            viewContext.delete(<#T##object: NSManagedObject##NSManagedObject#>)
 
             do {
                 try viewContext.save()
@@ -179,6 +211,24 @@ struct EntryList: View {
                 fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
             }
         }
+    }
+    
+    private func clearPopupValues() {
+        newPassword = ""
+        newUsername = ""
+        newWebsite = ""
+    }
+    
+    private func setPopupForNewEntry() {
+        popupTitle = "Add New Entry"
+        popupSaveButtonTitle = "Save"
+        isUpdatingRow = false
+    }
+    
+    private func setPopupForUpdate() {
+        popupTitle = "Update Information"
+        popupSaveButtonTitle = "Update"
+        isUpdatingRow = true
     }
 }
 /*
