@@ -19,6 +19,7 @@
 		B7971896259CFFCC003E052D /* LoginDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7971895259CFFCC003E052D /* LoginDataModel.swift */; };
 		B79718A9259E8E9D003E052D /* LoginEntry+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = B79718A7259E8E9D003E052D /* LoginEntry+CoreDataClass.swift */; };
 		B79718FF25A78D14003E052D /* ImageGrabber.swift in Sources */ = {isa = PBXBuildFile; fileRef = B79718FE25A78D14003E052D /* ImageGrabber.swift */; };
+		B7F32ECD25ACD88300FB3E05 /* KeychainInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7F32ECC25ACD88300FB3E05 /* KeychainInterface.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -57,6 +58,7 @@
 		B7971895259CFFCC003E052D /* LoginDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginDataModel.swift; sourceTree = "<group>"; };
 		B79718A7259E8E9D003E052D /* LoginEntry+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LoginEntry+CoreDataClass.swift"; sourceTree = "<group>"; };
 		B79718FE25A78D14003E052D /* ImageGrabber.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageGrabber.swift; sourceTree = "<group>"; };
+		B7F32ECC25ACD88300FB3E05 /* KeychainInterface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainInterface.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -113,6 +115,7 @@
 				B797185D259CEE63003E052D /* Assets.xcassets */,
 				B797188C259CF397003E052D /* EntryList.swift */,
 				B79718FE25A78D14003E052D /* ImageGrabber.swift */,
+				B7F32ECC25ACD88300FB3E05 /* KeychainInterface.swift */,
 				B7971862259CEE63003E052D /* Persistence.swift */,
 				B7971867259CEE63003E052D /* Info.plist */,
 				B7971864259CEE63003E052D /* CodeVault.xcdatamodeld */,
@@ -285,6 +288,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B7F32ECD25ACD88300FB3E05 /* KeychainInterface.swift in Sources */,
 				B7971863259CEE63003E052D /* Persistence.swift in Sources */,
 				B7971896259CFFCC003E052D /* LoginDataModel.swift in Sources */,
 				B797188D259CF397003E052D /* EntryList.swift in Sources */,
