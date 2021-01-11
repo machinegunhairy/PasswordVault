@@ -38,10 +38,14 @@ struct ContentView: View {
                     
                     TextField("Username", text: $userName)
                         .textFieldStyle(RoundedBorderTextFieldStyle())
+                        .autocapitalization(.none)
+                        .disableAutocorrection(true)
                     
                     SecureField("Password", text: $password)
                         .textFieldStyle(RoundedBorderTextFieldStyle())
                         .textContentType(.password)
+                        .autocapitalization(.none)
+                        .disableAutocorrection(true)
                     
                     HStack{
                         Button(action: {

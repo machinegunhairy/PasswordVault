@@ -20,6 +20,7 @@
 		B79718A9259E8E9D003E052D /* LoginEntry+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = B79718A7259E8E9D003E052D /* LoginEntry+CoreDataClass.swift */; };
 		B79718FF25A78D14003E052D /* ImageGrabber.swift in Sources */ = {isa = PBXBuildFile; fileRef = B79718FE25A78D14003E052D /* ImageGrabber.swift */; };
 		B7F32ECD25ACD88300FB3E05 /* KeychainInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7F32ECC25ACD88300FB3E05 /* KeychainInterface.swift */; };
+		B7F32ECF25AD099000FB3E05 /* ColorAssets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B7F32ECE25AD099000FB3E05 /* ColorAssets.xcassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -59,6 +60,7 @@
 		B79718A7259E8E9D003E052D /* LoginEntry+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LoginEntry+CoreDataClass.swift"; sourceTree = "<group>"; };
 		B79718FE25A78D14003E052D /* ImageGrabber.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageGrabber.swift; sourceTree = "<group>"; };
 		B7F32ECC25ACD88300FB3E05 /* KeychainInterface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainInterface.swift; sourceTree = "<group>"; };
+		B7F32ECE25AD099000FB3E05 /* ColorAssets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = ColorAssets.xcassets; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -113,6 +115,7 @@
 				B7971859259CEE5F003E052D /* CodeVaultApp.swift */,
 				B7971891259CFFB6003E052D /* Login */,
 				B797185D259CEE63003E052D /* Assets.xcassets */,
+				B7F32ECE25AD099000FB3E05 /* ColorAssets.xcassets */,
 				B797188C259CF397003E052D /* EntryList.swift */,
 				B79718FE25A78D14003E052D /* ImageGrabber.swift */,
 				B7F32ECC25ACD88300FB3E05 /* KeychainInterface.swift */,
@@ -263,6 +266,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B7971861259CEE63003E052D /* Preview Assets.xcassets in Resources */,
+				B7F32ECF25AD099000FB3E05 /* ColorAssets.xcassets in Resources */,
 				B797185E259CEE63003E052D /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -17,25 +17,39 @@ class LoginDataModel: ObservableObject {
     func login(username: String, password: String) {
         let passwordData = Data(password.utf8)
         let hashedPassword = SHA512.hash(data: passwordData)
-        print(hashedPassword) //compared against stored
-        self.isLoggedIn = true
+        if (hashedPassword.description == getFromDefaults(key: username)) {
+            self.isLoggedIn = true
+        }
     }
     
     func create(username: String, password: String) -> Bool {
-        var userExists = true
-        if userExists {
+        guard getFromDefaults(key: username) == nil else {
             return false
         }
-        //check if user exists, login if so
         
         let passwordData = Data(password.utf8)
         let hashedPassword = SHA512.hash(data: passwordData)
-        print(hashedPassword) //make new entry
+//        print(hashedPassword)
+        setToDefaults(key: username, theValue: hashedPassword)
         login(username: username, password: password)
         return true
     }
     
     func logout() {
         self.isLoggedIn = false
+    }
+    
+    private func getFromDefaults(key: String) -> String? {
+        let def = UserDefaults.standard
+        guard let theValue = def.object(forKey: key) as? String else {
+            return nil
+        }
+        
+        return theValue
+    }
+    
+    private func setToDefaults(key: String, theValue: SHA512Digest) {
+        let def = UserDefaults.standard
+        def.set(theValue.description, forKey: key)
     }
 }

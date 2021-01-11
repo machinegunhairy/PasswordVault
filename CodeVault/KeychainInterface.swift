@@ -21,7 +21,7 @@ class KeychainInterface {
      service: string to identify a set of keychain items like 'com.my-app.bundle-id'
      account: a string to identify a keychain item within a specific service, like "username@email.com"
      */
-    static func save(passwordString: String, service: String, account: String) throws {
+    static func save(passwordString: String, account: String) throws {
         let password = (passwordString as NSString).data(using: String.Encoding.utf8.rawValue)
         let query: [String: AnyObject] = [
             kSecAttrService as String: appServiceBundle as AnyObject,
@@ -41,9 +41,10 @@ class KeychainInterface {
         }
     }
     
-    static func update(password: Data, service: String, account: String) throws {
+    static func update(passwordString: String, account: String) throws {
+        let password = (passwordString as NSString).data(using: String.Encoding.utf8.rawValue)
         let query: [String: AnyObject] = [
-            kSecAttrService as String: service as AnyObject,
+            kSecAttrService as String: appServiceBundle as AnyObject,
             kSecAttrAccount as String: account as AnyObject,
             kSecClass as String: kSecClassGenericPassword
         ]
@@ -63,9 +64,9 @@ class KeychainInterface {
         }
     }
     
-    static func readPassword(service: String, account: String) throws -> String {
+    static func readPassword(account: String) throws -> String {
         let query: [String: AnyObject] = [
-            kSecAttrService as String: service as AnyObject,
+            kSecAttrService as String: appServiceBundle as AnyObject,
             kSecAttrAccount as String: account as AnyObject,
             kSecClass as String: kSecClassGenericPassword,
             kSecMatchLimit as String: kSecMatchLimitOne,
@@ -91,9 +92,9 @@ class KeychainInterface {
         return String(x)
     }
     
-    static func deletePassword(service: String, account: String) throws {
+    static func deletePassword(account: String) throws {
         let query: [String: AnyObject] = [
-            kSecAttrService as String: service as AnyObject,
+            kSecAttrService as String: appServiceBundle as AnyObject,
             kSecAttrAccount as String: account as AnyObject,
             kSecClass as String: kSecClassGenericPassword
         ]

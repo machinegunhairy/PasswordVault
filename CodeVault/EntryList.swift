@@ -33,6 +33,7 @@ struct LoginRow: View {
                     .frame(maxWidth:.infinity, alignment: .leading)
             } //VStack
         } //HStack
+        .cornerRadius(10.0)
         .onAppear(perform: loadImage)
     } //View
     
@@ -63,20 +64,22 @@ struct EntryList: View {
             ZStack{
                 List {
                     ForEach(websiteDetails) { webEntry in
-                        let website = webEntry.website ?? "Error"
-                        let logName = webEntry.username ?? "Error"
-                        let logPassword = webEntry.password ?? "Error"
+                        let website: String = webEntry.website ?? "Error"
+                        let logName: String = webEntry.username ?? "Error"
+                        let logPassword: String = webEntry.password ?? "Error"
+                        let encryptedPassword = try? KeychainInterface.readPassword(account: logPassword)
                         LoginRow(loginObject: LoginEntryObject(id: UUID(),
                                                                websiteURL: website,
                                                                loginName: logName,
-                                                               loginPassword: logPassword))
+                                                               loginPassword: encryptedPassword ?? "Password Failed"))
                             .contentShape(Rectangle())
+//                            .foregroundColor(Color.yellow) //text color
                             .onTapGesture {
                                 setPopupForUpdate()
                                 selectedRow = webEntry
                                 self.newWebsite = website
                                 self.newUsername = logName
-                                self.newPassword = logPassword
+                                self.newPassword = encryptedPassword ?? "Password Error"
                                 showingCustomAdditonPopup = true
                             }
                     }
@@ -97,7 +100,7 @@ struct EntryList: View {
                         }
                         .padding(20)
                         .foregroundColor(Color.white)
-                        .background(Color.blue)
+                        .background(Color(UIColor.systemBlue))
                         .cornerRadius(100)
                     }
                     .padding(.trailing, 30)
@@ -112,10 +115,10 @@ struct EntryList: View {
                             Text(popupTitle)
                                 .bold().padding()
                                 .frame(maxWidth: .infinity)
-                                .background(Color.blue)
+                                .background(Color(UIColor.systemBlue))
                                 .foregroundColor(Color.white)
                             Group {
-                                TextField("www.", text: $newWebsite)
+                                TextField("Website Name", text: $newWebsite)
                                     .textFieldStyle(RoundedBorderTextFieldStyle())
                                     .autocapitalization(.none)
                                     .disableAutocorrection(true)
@@ -131,7 +134,7 @@ struct EntryList: View {
                             .padding(.horizontal)
                             
                             Spacer()
-                            HStack {
+                            HStack { //Buttons
                                 Button(action: {
                                     self.showingCustomAdditonPopup = false
                                     clearPopupValues()
@@ -139,7 +142,7 @@ struct EntryList: View {
                                     Text("Close")
                                 }
                                 .padding()
-                                .background(Color.blue)
+                                .background(Color(UIColor.systemBlue))
                                 .foregroundColor(Color.white)
                                 .cornerRadius(8)
                                 
@@ -156,20 +159,21 @@ struct EntryList: View {
                                     Text(popupSaveButtonTitle)
                                 }
                                 .padding()
-                                .background(Color.blue)
+                                .background(Color(UIColor.systemBlue))
                                 .foregroundColor(Color.white)
                                 .cornerRadius(8)
                             }//HStack
                             .padding(12)
                         }//VStack
-                        .frame(width: 300, height: 336)
-                        .background(Color.white)
+                        .frame(width: 300, height: 336, alignment: .top)
+                        
+                        .background(Color(UIColor.secondarySystemBackground))
                         .cornerRadius(20).shadow(radius: 20)
                     }//ZStack
                 }//Popup Wrapper
                 
             }//ZStack
-            .navigationTitle("Websites") //mcgreahamtodo
+            .navigationTitle("Websites")
             .ignoresSafeArea(.keyboard, edges: .bottom)
             
         }//NavigationView
@@ -184,10 +188,12 @@ struct EntryList: View {
             newEntry.appLoginName = _loginName
             newEntry.website = self.newWebsite
             newEntry.username = self.newUsername
-            newEntry.password = self.newPassword
+            newEntry.password = self.newWebsite + self.newUsername
             
             do {
                 try viewContext.save()
+                try? KeychainInterface.save(passwordString: self.newPassword,
+                                            account: newEntry.password ?? "ErrorState")
                 clearPopupValues()
             } catch {
                 let saveError = error as NSError
@@ -200,20 +206,23 @@ struct EntryList: View {
         viewContext.performAndWait {
             selectedRow?.website = self.newWebsite
             selectedRow?.username = self.newUsername
-            selectedRow?.password = self.newPassword
+            selectedRow?.password = self.newWebsite + self.newUsername
             try? viewContext.save()
+            try? KeychainInterface.update(passwordString: self.newPassword, account: selectedRow?.password ?? "ErrorState")
         }
     }
 
     private func deleteLoginEntry(offsets: IndexSet) {
         withAnimation {
-            offsets.map { websiteDetails[$0] }.forEach(viewContext.delete)
-
+            let mapResult = offsets.map {websiteDetails[$0] }
+            mapResult.forEach { result in
+                try? KeychainInterface.deletePassword(account: result.password ?? "ErrorState")
+                viewContext.delete(result)
+            }
+            
             do {
                 try viewContext.save()
             } catch {
-                // Replace this implementation with code to handle the error appropriately.
-                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
                 let nsError = error as NSError
                 fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
             }
