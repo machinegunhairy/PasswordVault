@@ -24,7 +24,7 @@ struct ContentView: View {
     
     var body: some View {
         if loginModel.isLoggedIn {
-            EntryList()
+            EntryList(userName)
         } else {
             
             ZStack{

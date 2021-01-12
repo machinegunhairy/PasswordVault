@@ -43,6 +43,8 @@ struct LoginRow: View {
 }
 
 struct EntryList: View {
+    private var loggedInName: String
+    var websiteDetails: FetchRequest<LoginEntry>
     @State private var showingCustomAdditonPopup = false
     @State private var newWebsite:String = ""
     @State private var newUsername:String = ""
@@ -54,17 +56,20 @@ struct EntryList: View {
     @State private var selectedRow:FetchedResults<LoginEntry>.Element? = nil
     
     @Environment(\.managedObjectContext) private var viewContext
-    @FetchRequest(
-        entity: LoginEntry.entity(),
-        sortDescriptors: [NSSortDescriptor(keyPath: \LoginEntry.website, ascending: true)]/*,
-        predicate: NSPredicate(format: "username == %@","Bill")*/
-    ) private var websiteDetails: FetchedResults<LoginEntry>
+
+    init(_ loggedIn: String) {
+        loggedInName = loggedIn
+        websiteDetails = FetchRequest<LoginEntry>(
+            entity: LoginEntry.entity(),
+            sortDescriptors: [NSSortDescriptor(keyPath: \LoginEntry.website, ascending: true)],
+            predicate: NSPredicate(format: "appLoginName == %@",loggedIn))
+    }
     
     var body: some View {
         NavigationView{
             ZStack{
                 List {
-                    ForEach(websiteDetails) { webEntry in
+                    ForEach(websiteDetails.wrappedValue, id: \.self) { webEntry in
                         let website: String = webEntry.website ?? "Error"
                         let logName: String = webEntry.username ?? "Error"
                         let logPassword: String = webEntry.password ?? "Error"
@@ -186,11 +191,9 @@ struct EntryList: View {
     }//Body
     
     private func addWebsite() {
-        let _loginName = "nameILoggedIntoThisAppWith"
-        
         withAnimation {
             let newEntry = LoginEntry(context: viewContext)
-            newEntry.appLoginName = _loginName
+            newEntry.appLoginName = self.loggedInName
             newEntry.website = self.newWebsite
             newEntry.username = self.newUsername
             newEntry.password = self.newWebsite + self.newUsername
@@ -219,12 +222,12 @@ struct EntryList: View {
     
     private func deleteLoginEntry(offsets: IndexSet) {
         withAnimation {
-            let mapResult = offsets.map {websiteDetails[$0] }
-            mapResult.forEach { result in
-                try? KeychainInterface.deletePassword(account: result.password ?? "ErrorState")
-                viewContext.delete(result)
+            for index in offsets {
+                let entry = websiteDetails.wrappedValue[index]
+                try? KeychainInterface.deletePassword(account: entry.password ?? "ErrorState")
+                viewContext.delete(entry)
             }
-            
+
             do {
                 try viewContext.save()
             } catch {
