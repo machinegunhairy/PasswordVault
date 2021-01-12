@@ -184,6 +184,15 @@ struct EntryList: View {
             }//ZStack
             .navigationTitle("Websites")
             .ignoresSafeArea(.keyboard, edges: .bottom)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing){
+                    Button(action: {
+                        LoginDataModel.shared.logout()
+                    }) {
+                        Text("Logout")
+                    }
+                }
+            }
             
         }//NavigationView
         

@@ -31,7 +31,6 @@ class LoginDataModel: ObservableObject {
         
         let passwordData = Data(password.utf8)
         let hashedPassword = SHA512.hash(data: passwordData)
-//        print(hashedPassword)
         setToDefaults(key: username, theValue: hashedPassword)
         _ = login(username: username, password: password)
         return true

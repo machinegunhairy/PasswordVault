@@ -86,7 +86,6 @@ struct ContentView: View {
                             self.alertData = nil
                           }))
                 }
-                
             } //ZStack
         }
     }
@@ -95,6 +94,8 @@ struct ContentView: View {
         if !loginModel.login(username: userName, password: password) {
             self.alertData = AlertData(title: "Please try again",
                                        message: "This username/password combination is not found. Username and password are case sensitive, please try again.")
+        } else {
+            password = ""
         }
     }
     
@@ -102,6 +103,8 @@ struct ContentView: View {
         if !loginModel.create(username: userName, password: password) {
             self.alertData = AlertData(title: "User Exists",
                                        message: "This user already exists. Please pick a unique username.")
+        } else {
+            password = ""
         }
     }
     
