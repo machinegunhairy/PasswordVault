@@ -56,7 +56,8 @@ struct EntryList: View {
     @Environment(\.managedObjectContext) private var viewContext
     @FetchRequest(
         entity: LoginEntry.entity(),
-        sortDescriptors: [NSSortDescriptor(keyPath: \LoginEntry.website, ascending: true)]
+        sortDescriptors: [NSSortDescriptor(keyPath: \LoginEntry.website, ascending: true)]/*,
+        predicate: NSPredicate(format: "username == %@","Bill")*/
     ) private var websiteDetails: FetchedResults<LoginEntry>
     
     var body: some View {
@@ -73,7 +74,7 @@ struct EntryList: View {
                                                                loginName: logName,
                                                                loginPassword: encryptedPassword ?? "Password Failed"))
                             .contentShape(Rectangle())
-//                            .foregroundColor(Color.yellow) //text color
+                            //                            .foregroundColor(Color.yellow) //text color
                             .onTapGesture {
                                 setPopupForUpdate()
                                 selectedRow = webEntry
@@ -110,65 +111,69 @@ struct EntryList: View {
                     ZStack {
                         Color.black.opacity(0.4)
                             .ignoresSafeArea()
-                        
-                        VStack(spacing: 20) {
-                            Text(popupTitle)
-                                .bold().padding()
-                                .frame(maxWidth: .infinity)
-                                .background(Color(UIColor.systemBlue))
-                                .foregroundColor(Color.white)
-                            Group {
-                                TextField("Website Name", text: $newWebsite)
-                                    .textFieldStyle(RoundedBorderTextFieldStyle())
-                                    .autocapitalization(.none)
-                                    .disableAutocorrection(true)
-                                TextField("Username", text: $newUsername)
-                                    .textFieldStyle(RoundedBorderTextFieldStyle())
-                                    .autocapitalization(.none)
-                                    .disableAutocorrection(true)
-                                TextField("Password", text: $newPassword)
-                                    .textFieldStyle(RoundedBorderTextFieldStyle())
-                                    .autocapitalization(.none)
-                                    .disableAutocorrection(true)
-                            }
-                            .padding(.horizontal)
-                            
-                            Spacer()
-                            HStack { //Buttons
-                                Button(action: {
-                                    self.showingCustomAdditonPopup = false
-                                    clearPopupValues()
-                                }) {
-                                    Text("Close")
+                        VStack { //Here to position the popup at the top
+                            VStack(spacing: 20) {
+                                Text(popupTitle)
+                                    .bold().padding()
+                                    .frame(maxWidth: .infinity)
+                                    .background(Color(UIColor.systemBlue))
+                                    .foregroundColor(Color.white)
+                                Group {
+                                    TextField("Website Name", text: $newWebsite)
+                                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                                        .autocapitalization(.none)
+                                        .disableAutocorrection(true)
+                                    TextField("Username", text: $newUsername)
+                                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                                        .autocapitalization(.none)
+                                        .disableAutocorrection(true)
+                                    TextField("Password", text: $newPassword)
+                                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                                        .autocapitalization(.none)
+                                        .disableAutocorrection(true)
                                 }
-                                .padding()
-                                .background(Color(UIColor.systemBlue))
-                                .foregroundColor(Color.white)
-                                .cornerRadius(8)
+                                .padding(.horizontal)
                                 
-                                Button(action: {
-                                    if !self.newWebsite.isEmpty && !self.newUsername.isEmpty && !self.newPassword.isEmpty {
-                                        if isUpdatingRow {
-                                            updateWebsite()
-                                        } else {
-                                            addWebsite()
-                                        }
+                                Spacer()
+                                HStack { //Buttons
+                                    Button(action: {
                                         self.showingCustomAdditonPopup = false
+                                        clearPopupValues()
+                                    }) {
+                                        Text("Close")
                                     }
-                                }) {
-                                    Text(popupSaveButtonTitle)
-                                }
-                                .padding()
-                                .background(Color(UIColor.systemBlue))
-                                .foregroundColor(Color.white)
-                                .cornerRadius(8)
-                            }//HStack
-                            .padding(12)
-                        }//VStack
-                        .frame(width: 300, height: 336, alignment: .top)
+                                    .padding()
+                                    .background(Color(UIColor.systemBlue))
+                                    .foregroundColor(Color.white)
+                                    .cornerRadius(8)
+                                    
+                                    Button(action: {
+                                        if !self.newWebsite.isEmpty && !self.newUsername.isEmpty && !self.newPassword.isEmpty {
+                                            if isUpdatingRow {
+                                                updateWebsite()
+                                            } else {
+                                                addWebsite()
+                                            }
+                                            self.showingCustomAdditonPopup = false
+                                        }
+                                    }) {
+                                        Text(popupSaveButtonTitle)
+                                    }
+                                    .padding()
+                                    .background(Color(UIColor.systemBlue))
+                                    .foregroundColor(Color.white)
+                                    .cornerRadius(8)
+                                }//HStack
+                                .padding(12)
+                            }//VStack
+                            .frame(width: 300, height: 336, alignment: .top)
+                            
+                            .background(Color(UIColor.secondarySystemBackground))
+                            .cornerRadius(20).shadow(radius: 20)
+                            .padding(.vertical)
+                            Spacer()
+                        }//Outer VStack
                         
-                        .background(Color(UIColor.secondarySystemBackground))
-                        .cornerRadius(20).shadow(radius: 20)
                     }//ZStack
                 }//Popup Wrapper
                 
@@ -211,7 +216,7 @@ struct EntryList: View {
             try? KeychainInterface.update(passwordString: self.newPassword, account: selectedRow?.password ?? "ErrorState")
         }
     }
-
+    
     private func deleteLoginEntry(offsets: IndexSet) {
         withAnimation {
             let mapResult = offsets.map {websiteDetails[$0] }
@@ -248,9 +253,9 @@ struct EntryList: View {
     }
 }
 /*
-struct EntryList_Previews: PreviewProvider {
-    static var previews: some View {
-        EntryList().environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
-    }
-}
-*/
+ struct EntryList_Previews: PreviewProvider {
+ static var previews: some View {
+ EntryList().environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
+ }
+ }
+ */
