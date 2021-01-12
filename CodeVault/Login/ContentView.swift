@@ -92,7 +92,10 @@ struct ContentView: View {
     }
     
     private func loginPressed() {
-        loginModel.login(username: userName, password: password)
+        if !loginModel.login(username: userName, password: password) {
+            self.alertData = AlertData(title: "Please try again",
+                                       message: "This username/password combination is not found. Username and password are case sensitive, please try again.")
+        }
     }
     
     private func createPressed() {

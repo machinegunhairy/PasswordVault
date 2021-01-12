@@ -79,7 +79,6 @@ struct EntryList: View {
                                                                loginName: logName,
                                                                loginPassword: encryptedPassword ?? "Password Failed"))
                             .contentShape(Rectangle())
-                            //                            .foregroundColor(Color.yellow) //text color
                             .onTapGesture {
                                 setPopupForUpdate()
                                 selectedRow = webEntry

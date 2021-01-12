@@ -14,12 +14,14 @@ class LoginDataModel: ObservableObject {
     
     @Published var isLoggedIn: Bool = false
     
-    func login(username: String, password: String) {
+    func login(username: String, password: String) -> Bool {
         let passwordData = Data(password.utf8)
         let hashedPassword = SHA512.hash(data: passwordData)
         if (hashedPassword.description == getFromDefaults(key: username)) {
             self.isLoggedIn = true
+            return true
         }
+        return false
     }
     
     func create(username: String, password: String) -> Bool {
@@ -31,7 +33,7 @@ class LoginDataModel: ObservableObject {
         let hashedPassword = SHA512.hash(data: passwordData)
 //        print(hashedPassword)
         setToDefaults(key: username, theValue: hashedPassword)
-        login(username: username, password: password)
+        _ = login(username: username, password: password)
         return true
     }
     
